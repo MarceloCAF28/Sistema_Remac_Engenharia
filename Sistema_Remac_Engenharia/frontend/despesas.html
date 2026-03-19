@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão de Despesas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    <link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <span class="navbar-brand mb-0 h1">
+                <i class="bi bi-cart"></i> REMAC ENGENHARIA
+            </span>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html"><i class="bi bi-house-door"></i> Início</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="dashboard.html"><i class="bi bi-bar-chart"></i> Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="obras.html"><i class="bi bi-building"></i> Obras</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="receitas.html"><i class="bi bi-cash-stack"></i> Receitas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="despesas.html"><i class="bi bi-cart"></i> Despesas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="contas.html"><i class="bi bi-bank"></i> Contas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="abc.html"><i class="bi bi-bar-chart-steps"></i> Curva ABC</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="financeiro.html"><i class="bi bi-graph-up"></i> Financeiro</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="relatorios.html"><i class="bi bi-file-text"></i> Relatórios</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <!-- Cabeçalho -->
+        <div class="row mb-4">
+            <div class="col">
+                <h2><i class="bi bi-cart"></i> Despesas</h2>
+            </div>
+            <div class="col text-end">
+                <div class="btn-group">
+                    <button class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown">
+                        <i class="bi bi-plus-circle"></i> Nova Despesa
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#" onclick="abrirModalNovaDespesaMaterial()">
+                            <i class="bi bi-box text-primary"></i> Material
+                        </a></li>
+                        <li><a class="dropdown-item" href="#" onclick="abrirModalNovaDespesaMaoObra()">
+                            <i class="bi bi-person-workspace text-success"></i> Mão de Obra
+                        </a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#" onclick="abrirModalNovaDespesaOutros()">
+                            <i class="bi bi-three-dots text-warning"></i> Outros
+                        </a></li>
+                    </ul>
+                </div>
+                <button class="btn btn-info" onclick="verFluxoParcelas()">
+                    <i class="bi bi-calendar-check"></i> Fluxo de Parcelas
+                </button>
+            </div>
+        </div>
+
+        <!-- Cards de Resumo -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="card bg-primary text-white">
+                    <div class="card-body">
+                        <h6>Total Previsto</h6>
+                        <h3 id="totalPrevisto">R$ 0,00</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-success text-white">
+                    <div class="card-body">
+                        <h6>Total Pago</h6>
+                        <h3 id="totalPago">R$ 0,00</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-warning text-white">
+                    <div class="card-body">
+                        <h6>Materiais</h6>
+                        <h3 id="totalMateriais">R$ 0,00</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-danger text-white">
+                    <div class="card-body">
+                        <h6>Mão de Obra</h6>
+                        <h3 id="totalMaoObra">R$ 0,00</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filtros -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-2">
+                        <label>Obra</label>
+                        <select class="form-select" id="filtroObra" onchange="aplicarFiltros()">
+                            <option value="">Todas as Obras</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label>Tipo</label>
+                        <select class="form-select" id="filtroTipo" onchange="aplicarFiltros()">
+                            <option value="">Todos</option>
+                            <option value="MATERIAL">Material</option>
+                            <option value="MÃO DE OBRA">Mão de Obra</option>
+                            <option value="OUTROS">Outros</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label>Mês</label>
+                        <select class="form-select" id="filtroMes" onchange="aplicarFiltros()">
+                            <option value="">Todos</option>
+                            <option value="1">Janeiro</option>
+                            <option value="2">Fevereiro</option>
+                            <option value="3">Março</option>
+                            <option value="4">Abril</option>
+                            <option value="5">Maio</option>
+                            <option value="6">Junho</option>
+                            <option value="7">Julho</option>
+                            <option value="8">Agosto</option>
+                            <option value="9">Setembro</option>
+                            <option value="10">Outubro</option>
+                            <option value="11">Novembro</option>
+                            <option value="12">Dezembro</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label>Ano</label>
+                        <select class="form-select" id="filtroAno" onchange="aplicarFiltros()">
+                            <option value="">Todos</option>
+                            <option value="2023">2023</option>
+                            <option value="2024">2024</option>
+                            <option value="2025">2025</option>
+                            <option value="2026">2026</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label>Status</label>
+                        <select class="form-select" id="filtroStatus" onchange="aplicarFiltros()">
+                            <option value="">Todos</option>
+                            <option value="PENDENTE">Pendente</option>
+                            <option value="PARCIAL">Parcial</option>
+                            <option value="PAGO">Pago</option>
+                            <option value="ATRASADO">Atrasado</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label>&nbsp;</label>
+                        <button class="btn btn-primary w-100" onclick="aplicarFiltros()">
+                            <i class="bi bi-search"></i> Filtrar
+                        </button>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col text-end">
+                        <button class="btn btn-secondary" onclick="limparFiltros()">
+                            <i class="bi bi-eraser"></i> Limpar Filtros
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <ul class="nav nav-tabs" id="despesasTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="todas-tab" data-bs-toggle="tab" data-bs-target="#todas" type="button">
+                    <i class="bi bi-list"></i> Todas as Despesas
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="materiais-tab" data-bs-toggle="tab" data-bs-target="#materiais-tab-pane" type="button">
+                    <i class="bi bi-box"></i> Materiais
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="maoobra-tab" data-bs-toggle="tab" data-bs-target="#maoobra-tab-pane" type="button">
+                    <i class="bi bi-person-workspace"></i> Mão de Obra
+                </button>
+            </li>
+        </ul>
+
+        <div class="tab-content mt-3">
+            <!-- Tab Todas as Despesas -->
+            <div class="tab-pane fade show active" id="todas" role="tabpanel">
+                <div class="card">
+                    <div class="card-header bg-dark text-white">
+                        <h5 class="mb-0"><i class="bi bi-list"></i> Todas as Despesas</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Data</th>
+                                        <th>Obra</th>
+                                        <th>Descrição</th>
+                                        <th>Tipo</th>
+                                        <th>Forma Pagto</th>
+                                        <th class="text-center">Parcelas</th>
+                                        <th class="text-end">Valor Total</th>
+                                        <th class="text-end">Valor Pago</th>
+                                        <th>Status</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="listaDespesas">
+                                    <tr><td colspan="11" class="text-center">Carregando...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab Materiais -->
+            <div class="tab-pane fade" id="materiais-tab-pane" role="tabpanel">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0"><i class="bi bi-box"></i> Materiais</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Data</th>
+                                        <th>Obra</th>
+                                        <th>Descrição</th>
+                                        <th>Fornecedor</th>
+                                        <th>Qtd</th>
+                                        <th>Unidade</th>
+                                        <th>Unitário</th>
+                                        <th>Forma Pagto</th>
+                                        <th class="text-center">Parcelas</th>
+                                        <th>Item ABC</th>
+                                        <th class="text-end">Total</th>
+                                        <th class="text-end">Pago</th>
+                                        <th>Status</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="listaMateriais">
+                                    <tr><td colspan="15" class="text-center">Carregando...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab Mão de Obra -->
+            <div class="tab-pane fade" id="maoobra-tab-pane" role="tabpanel">
+                <div class="card">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0"><i class="bi bi-person-workspace"></i> Mão de Obra</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Data</th>
+                                        <th>Obra</th>
+                                        <th>Descrição</th>
+                                        <th>Funcionário</th>
+                                        <th>Função</th>
+                                        <th>Horas</th>
+                                        <th>Valor/h</th>
+                                        <th>Forma Pagto</th>
+                                        <th class="text-center">Parcelas</th>
+                                        <th>Item ABC</th>
+                                        <th class="text-end">Total</th>
+                                        <th class="text-end">Pago</th>
+                                        <th>Status</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="listaMaoObra">
+                                    <tr><td colspan="15" class="text-center">Carregando...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL NOVA DESPESA (MATERIAL) -->
+    <div class="modal fade" id="modalNovaDespesaMaterial" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title"><i class="bi bi-box"></i> Novo Material</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formNovaDespesaMaterial">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Obra *</label>
+                                <select class="form-select" id="mat_obra_id" required>
+                                    <option value="">Selecione...</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Data *</label>
+                                <input type="date" class="form-control" id="mat_data" required>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Descrição do Material *</label>
+                            <input type="text" class="form-control" id="mat_descricao" required>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Fornecedor</label>
+                                <input type="text" class="form-control" id="mat_fornecedor">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Quantidade</label>
+                                <input type="number" class="form-control" id="mat_quantidade" step="0.01">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Unidade</label>
+                                <select class="form-select" id="mat_unidade">
+                                    <option value="UN">UN</option>
+                                    <option value="KG">KG</option>
+                                    <option value="M">M</option>
+                                    <option value="M2">M²</option>
+                                    <option value="M3">M³</option>
+                                    <option value="SC">SC</option>
+                                    <option value="PC">PC</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Valor Unitário (R$)</label>
+                                <input type="number" class="form-control" id="mat_valor_unitario" step="0.01">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Valor Total *</label>
+                                <input type="number" class="form-control" id="mat_valor_total" step="0.01" required onchange="calcularValorParcelaMaterial()">
+                            </div>
+                        </div>
+                        
+                        <!-- Dados de Pagamento à Vista (opcional) -->
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Valor Pago (à vista)</label>
+                                <input type="number" class="form-control" id="mat_valor_pago" step="0.01" value="0">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Data Pagamento</label>
+                                <input type="date" class="form-control" id="mat_data_pagamento">
+                            </div>
+                        </div>
+                        
+                        <!-- Dados de Parcelamento - MATERIAL -->
+                        <h6 class="bg-light p-2 mb-3 mt-3"><i class="bi bi-credit-card"></i> Dados de Parcelamento</h6>
+                        
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Quantidade de Parcelas</label>
+                                <select class="form-select" id="mat_quantidade_parcelas" onchange="calcularValorParcelaMaterial()">
+                                    <option value="1">À vista</option>
+                                    <option value="2">2x</option>
+                                    <option value="3">3x</option>
+                                    <option value="4">4x</option>
+                                    <option value="5">5x</option>
+                                    <option value="6">6x</option>
+                                    <option value="7">7x</option>
+                                    <option value="8">8x</option>
+                                    <option value="9">9x</option>
+                                    <option value="10">10x</option>
+                                    <option value="11">11x</option>
+                                    <option value="12">12x</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4 mb-3" id="mat_div_valor_parcela" style="display: none;">
+                                <label class="form-label">Valor por Parcela</label>
+                                <input type="text" class="form-control" id="mat_valor_parcela" readonly>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Forma de Pagamento</label>
+                                <select class="form-select" id="mat_forma_pagamento_id">
+                                    <option value="">Selecione...</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Conta de Pagamento</label>
+                                <select class="form-select" id="mat_conta_id">
+                                    <option value="">Selecione...</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Data da Primeira Parcela</label>
+                                <input type="date" class="form-control" id="mat_data_primeira_parcela">
+                                <small class="text-muted">Se parcelado, as próximas vencerão mensalmente</small>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3" id="mat_div_aviso_parcelamento" style="display: none;">
+                            <div class="alert alert-info">
+                                <i class="bi bi-info-circle"></i> <span id="mat_aviso_parcelamento"></span>
+                            </div>
+                        </div>
+                        
+                        <!-- Item ABC -->
+                        <div class="mb-3">
+                            <label class="form-label">Item ABC (opcional)</label>
+                            <select class="form-select" id="mat_item_abc_id">
+                                <option value="">Não vincular</option>
+                                <!-- OS ITENS SERÃO INSERIDOS VIA JAVASCRIPT -->
+                            </select>
+                            <small class="text-muted">Vincular a um item da Curva ABC</small>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Observação</label>
+                            <textarea class="form-control" id="mat_observacao" rows="2"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="salvarNovaDespesaMaterial()">
+                        <i class="bi bi-check-lg"></i> Salvar Material
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL NOVA DESPESA (MÃO DE OBRA) -->
+    <div class="modal fade" id="modalNovaDespesaMaoObra" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title"><i class="bi bi-person-workspace"></i> Nova Mão de Obra</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formNovaDespesaMaoObra">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Obra *</label>
+                                <select class="form-select" id="mo_obra_id" required>
+                                    <option value="">Selecione...</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Data *</label>
+                                <input type="date" class="form-control" id="mo_data" required>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Descrição do Serviço *</label>
+                            <input type="text" class="form-control" id="mo_descricao" required>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Funcionário</label>
+                                <input type="text" class="form-control" id="mo_funcionario">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Função</label>
+                                <select class="form-select" id="mo_funcao">
+                                    <option value="">Selecione...</option>
+                                    <option value="PEDREIRO">Pedreiro</option>
+                                    <option value="SERVENTE">Servente</option>
+                                    <option value="CARPINTEIRO">Carpinteiro</option>
+                                    <option value="ELETRICISTA">Eletricista</option>
+                                    <option value="ENCANADOR">Encanador</option>
+                                    <option value="PINTOR">Pintor</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Horas Trabalhadas</label>
+                                <input type="number" class="form-control" id="mo_horas" step="0.5">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Valor Hora (R$)</label>
+                                <input type="number" class="form-control" id="mo_valor_hora" step="0.01">
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Valor Total *</label>
+                                <input type="number" class="form-control" id="mo_valor_total" step="0.01" required onchange="calcularValorParcelaMaoObra()">
+                            </div>
+                        </div>
+                        
+                        <!-- Dados de Pagamento à Vista (opcional) -->
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Valor Pago (à vista)</label>
+                                <input type="number" class="form-control" id="mo_valor_pago" step="0.01" value="0">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Data Pagamento</label>
+                                <input type="date" class="form-control" id="mo_data_pagamento">
+                            </div>
+                        </div>
+                        
+                        <!-- Dados de Parcelamento - MÃO DE OBRA -->
+                        <h6 class="bg-light p-2 mb-3 mt-3"><i class="bi bi-credit-card"></i> Dados de Parcelamento</h6>
+                        
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Quantidade de Parcelas</label>
+                                <select class="form-select" id="mo_quantidade_parcelas" onchange="calcularValorParcelaMaoObra()">
+                                    <option value="1">À vista</option>
+                                    <option value="2">2x</option>
+                                    <option value="3">3x</option>
+                                    <option value="4">4x</option>
+                                    <option value="5">5x</option>
+                                    <option value="6">6x</option>
+                                    <option value="7">7x</option>
+                                    <option value="8">8x</option>
+                                    <option value="9">9x</option>
+                                    <option value="10">10x</option>
+                                    <option value="11">11x</option>
+                                    <option value="12">12x</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4 mb-3" id="mo_div_valor_parcela" style="display: none;">
+                                <label class="form-label">Valor por Parcela</label>
+                                <input type="text" class="form-control" id="mo_valor_parcela" readonly>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Forma de Pagamento</label>
+                                <select class="form-select" id="mo_forma_pagamento_id">
+                                    <option value="">Selecione...</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Conta de Pagamento</label>
+                                <select class="form-select" id="mo_conta_id">
+                                    <option value="">Selecione...</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Data da Primeira Parcela</label>
+                                <input type="date" class="form-control" id="mo_data_primeira_parcela">
+                                <small class="text-muted">Se parcelado, as próximas vencerão mensalmente</small>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3" id="mo_div_aviso_parcelamento" style="display: none;">
+                            <div class="alert alert-info">
+                                <i class="bi bi-info-circle"></i> <span id="mo_aviso_parcelamento"></span>
+                            </div>
+                        </div>
+                        
+                        <!-- Item ABC -->
+                        <div class="mb-3">
+                            <label class="form-label">Item ABC (opcional)</label>
+                            <select class="form-select" id="mo_item_abc_id">
+                                <option value="">Não vincular</option>
+                                <!-- OS ITENS SERÃO INSERIDOS VIA JAVASCRIPT -->
+                            </select>
+                            <small class="text-muted">Vincular a um item da Curva ABC</small>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Observação</label>
+                            <textarea class="form-control" id="mo_observacao" rows="2"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-success" onclick="salvarNovaDespesaMaoObra()">
+                        <i class="bi bi-check-lg"></i> Salvar Mão de Obra
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL NOVA DESPESA (OUTROS) -->
+    <div class="modal fade" id="modalNovaDespesaOutros" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-warning text-white">
+                    <h5 class="modal-title"><i class="bi bi-three-dots"></i> Nova Despesa (Outros)</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formNovaDespesaOutros">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Obra *</label>
+                                <select class="form-select" id="out_obra_id" required>
+                                    <option value="">Selecione...</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Data *</label>
+                                <input type="date" class="form-control" id="out_data" required>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Descrição *</label>
+                            <input type="text" class="form-control" id="out_descricao" required>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Fornecedor</label>
+                                <input type="text" class="form-control" id="out_fornecedor">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Categoria</label>
+                                <select class="form-select" id="out_categoria_id">
+                                    <option value="">Selecione...</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <!-- Dados de Parcelamento -->
+                        <h6 class="bg-light p-2 mb-3 mt-3"><i class="bi bi-credit-card"></i> Dados de Parcelamento</h6>
+                        
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Valor Total *</label>
+                                <input type="number" class="form-control" id="out_valor_total" step="0.01" required onchange="calcularValorParcelaOutros()">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Quantidade de Parcelas</label>
+                                <select class="form-select" id="out_quantidade_parcelas" onchange="calcularValorParcelaOutros()">
+                                    <option value="1">À vista</option>
+                                    <option value="2">2x</option>
+                                    <option value="3">3x</option>
+                                    <option value="4">4x</option>
+                                    <option value="5">5x</option>
+                                    <option value="6">6x</option>
+                                    <option value="7">7x</option>
+                                    <option value="8">8x</option>
+                                    <option value="9">9x</option>
+                                    <option value="10">10x</option>
+                                    <option value="11">11x</option>
+                                    <option value="12">12x</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4 mb-3" id="out_div_valor_parcela" style="display: none;">
+                                <label class="form-label">Valor por Parcela</label>
+                                <input type="text" class="form-control" id="out_valor_parcela" readonly>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Forma de Pagamento</label>
+                                <select class="form-select" id="out_forma_pagamento_id">
+                                    <option value="">Selecione...</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Conta de Pagamento</label>
+                                <select class="form-select" id="out_conta_id">
+                                    <option value="">Selecione...</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Data da Primeira Parcela</label>
+                                <input type="date" class="form-control" id="out_data_primeira_parcela">
+                                <small class="text-muted">Se parcelado, as próximas vencerão mensalmente</small>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3" id="out_div_aviso_parcelamento" style="display: none;">
+                            <div class="alert alert-info">
+                                <i class="bi bi-info-circle"></i> <span id="out_aviso_parcelamento"></span>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Observação</label>
+                            <textarea class="form-control" id="out_observacao" rows="2"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-warning" onclick="salvarNovaDespesaOutros()">
+                        <i class="bi bi-check-lg"></i> Salvar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL VISUALIZAR PARCELAS DE DESPESA -->
+    <div class="modal fade" id="modalVisualizarParcelasDespesa" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-info text-white">
+                    <h5 class="modal-title"><i class="bi bi-credit-card"></i> Parcelas da Despesa</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="listaParcelasDespesa">
+                    Carregando...
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL PAGAR PARCELA -->
+    <div class="modal fade" id="modalPagarParcela" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title"><i class="bi bi-cash"></i> Pagar Parcela</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formPagarParcela">
+                        <input type="hidden" id="pag_parcela_id">
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Valor da Parcela</label>
+                            <input type="text" class="form-control" id="pag_valor_parcela" readonly>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="pag_valor_pago" class="form-label">Valor Pago *</label>
+                            <input type="number" class="form-control" id="pag_valor_pago" step="0.01" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="pag_data_pagamento" class="form-label">Data do Pagamento *</label>
+                            <input type="date" class="form-control" id="pag_data_pagamento" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="pag_conta_id" class="form-label">Conta de Pagamento *</label>
+                            <select class="form-select" id="pag_conta_id" required>
+                                <option value="">Selecione...</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="pag_forma_pagamento_id" class="form-label">Forma de Pagamento</label>
+                            <select class="form-select" id="pag_forma_pagamento_id">
+                                <option value="">Selecione...</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="pag_observacao" class="form-label">Observação</label>
+                            <textarea class="form-control" id="pag_observacao" rows="2"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-success" onclick="confirmarPagamentoParcela()">
+                        <i class="bi bi-check-lg"></i> Confirmar Pagamento
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Fluxo de Parcelas -->
+    <div class="modal fade" id="modalFluxoParcelas" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header bg-dark text-white">
+                    <h5 class="modal-title"><i class="bi bi-calendar-check"></i> Fluxo de Parcelas</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="conteudoFluxoParcelas">
+                    Carregando...
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/parcelas.js"></script>
+    <script src="js/despesas.js"></script>
+</body>
+</html>

@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão de Contas Bancárias</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    <link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <span class="navbar-brand mb-0 h1">
+                <i class="bi bi-bank"></i> REMAC ENGENHARIA
+            </span>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html"><i class="bi bi-house-door"></i> Início</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="dashboard.html"><i class="bi bi-bar-chart"></i> Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="obras.html"><i class="bi bi-building"></i> Obras</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="receitas.html"><i class="bi bi-cash-stack"></i> Receitas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="despesas.html"><i class="bi bi-cart"></i> Despesas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="contas.html"><i class="bi bi-bank"></i> Contas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="abc.html"><i class="bi bi-bar-chart-steps"></i> Curva ABC</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="financeiro.html"><i class="bi bi-graph-up"></i> Financeiro</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="relatorios.html"><i class="bi bi-file-text"></i> Relatórios</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <!-- Cabeçalho -->
+        <div class="row mb-4">
+            <div class="col">
+                <h2><i class="bi bi-bank"></i> Contas Bancárias</h2>
+            </div>
+            <div class="col text-end">
+                <button class="btn btn-success" onclick="abrirModalNovaConta()">
+                    <i class="bi bi-plus-circle"></i> Nova Conta
+                </button>
+                <button class="btn btn-info" onclick="verFluxoParcelas()">
+                    <i class="bi bi-calendar-check"></i> Fluxo de Parcelas
+                </button>
+            </div>
+        </div>
+
+        <!-- Cards de Resumo -->
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="card bg-primary text-white">
+                    <div class="card-body">
+                        <h6>Saldo Total</h6>
+                        <h3 id="saldoTotal">R$ 0,00</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card bg-success text-white">
+                    <div class="card-body">
+                        <h6>Total de Contas</h6>
+                        <h3 id="totalContas">0</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card bg-info text-white">
+                    <div class="card-body">
+                        <h6>Média por Conta</h6>
+                        <h3 id="mediaContas">R$ 0,00</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lista de Contas -->
+        <div class="card">
+            <div class="card-header bg-dark text-white">
+                <h5 class="mb-0"><i class="bi bi-list"></i> Contas Cadastradas</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nome</th>
+                                <th>Banco</th>
+                                <th>Agência</th>
+                                <th>Conta</th>
+                                <th>Tipo</th>
+                                <th class="text-end">Saldo Inicial</th>
+                                <th class="text-end">Saldo Atual</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="listaContas">
+                            <tr><td colspan="9" class="text-center">Carregando...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Nova Conta -->
+    <div class="modal fade" id="modalNovaConta" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title"><i class="bi bi-plus-circle"></i> Nova Conta</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formNovaConta">
+                        <div class="mb-3">
+                            <label class="form-label">Nome da Conta *</label>
+                            <input type="text" class="form-control" id="nome" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Banco</label>
+                            <input type="text" class="form-control" id="banco">
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Agência</label>
+                                <input type="text" class="form-control" id="agencia">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Número da Conta</label>
+                                <input type="text" class="form-control" id="numero_conta">
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Tipo</label>
+                            <select class="form-select" id="tipo">
+                                <option value="CORRENTE">Conta Corrente</option>
+                                <option value="POUPANCA">Poupança</option>
+                                <option value="INVESTIMENTO">Investimento</option>
+                                <option value="DIGITAL">Conta Digital</option>
+                                <option value="CAIXA">Caixa Físico</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Saldo Inicial (R$)</label>
+                            <input type="number" class="form-control" id="saldo_inicial" step="0.01" value="0">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Observação</label>
+                            <textarea class="form-control" id="observacao" rows="2"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-success" onclick="salvarNovaConta()">
+                        <i class="bi bi-check-lg"></i> Salvar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Editar Conta -->
+    <div class="modal fade" id="modalEditarConta" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title"><i class="bi bi-pencil"></i> Editar Conta</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formEditarConta">
+                        <input type="hidden" id="edit_id">
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Nome da Conta *</label>
+                            <input type="text" class="form-control" id="edit_nome" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Banco</label>
+                            <input type="text" class="form-control" id="edit_banco">
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Agência</label>
+                                <input type="text" class="form-control" id="edit_agencia">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Número da Conta</label>
+                                <input type="text" class="form-control" id="edit_numero_conta">
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Tipo</label>
+                            <select class="form-select" id="edit_tipo">
+                                <option value="CORRENTE">Conta Corrente</option>
+                                <option value="POUPANCA">Poupança</option>
+                                <option value="INVESTIMENTO">Investimento</option>
+                                <option value="DIGITAL">Conta Digital</option>
+                                <option value="CAIXA">Caixa Físico</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Saldo Inicial (R$)</label>
+                            <input type="number" class="form-control" id="edit_saldo_inicial" step="0.01">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Observação</label>
+                            <textarea class="form-control" id="edit_observacao" rows="2"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="atualizarConta()">
+                        <i class="bi bi-check-lg"></i> Atualizar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Extrato -->
+    <div class="modal fade" id="modalExtrato" tabindex="-1" style="--bs-modal-width: 90%;">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header bg-info text-white">
+                    <h5 class="modal-title"><i class="bi bi-receipt"></i> Extrato da Conta</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="extratoContent">
+                    Carregando...
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Fluxo de Parcelas -->
+    <div class="modal fade" id="modalFluxoParcelas" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header bg-dark text-white">
+                    <h5 class="modal-title"><i class="bi bi-calendar-check"></i> Fluxo de Parcelas</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="conteudoFluxoParcelas">
+                    Carregando...
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/parcelas.js"></script>
+    <script src="js/contas.js"></script>
+</body>
+</html>

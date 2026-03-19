@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatórios</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    <link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <span class="navbar-brand mb-0 h1">
+                <i class="bi bi-file-text"></i> REMAC ENGENHARIA
+            </span>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html"><i class="bi bi-house-door"></i> Início</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="dashboard.html"><i class="bi bi-bar-chart"></i> Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="obras.html"><i class="bi bi-building"></i> Obras</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="receitas.html"><i class="bi bi-cash-stack"></i> Receitas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="despesas.html"><i class="bi bi-cart"></i> Despesas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="contas.html"><i class="bi bi-bank"></i> Contas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="abc.html"><i class="bi bi-bar-chart-steps"></i> Curva ABC</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="financeiro.html"><i class="bi bi-graph-up"></i> Financeiro</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="relatorios.html"><i class="bi bi-file-text"></i> Relatórios</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <!-- Cabeçalho -->
+        <div class="row mb-4">
+            <div class="col">
+                <h2><i class="bi bi-file-text"></i> Relatórios</h2>
+                <p class="text-muted">Exporte relatórios detalhados em formato Excel</p>
+            </div>
+            <div class="col text-end">
+                <button class="btn btn-info" onclick="verFluxoParcelas()">
+                    <i class="bi bi-calendar-check"></i> Fluxo de Parcelas
+                </button>
+            </div>
+        </div>
+
+        <!-- Filtros Comuns -->
+        <div class="card mb-4">
+            <div class="card-header bg-dark text-white">
+                <h5 class="mb-0"><i class="bi bi-funnel"></i> Filtros para Relatórios</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label>Obra</label>
+                        <select class="form-select" id="relatorioObra">
+                            <option value="">Todas as Obras</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label>Mês</label>
+                        <select class="form-select" id="relatorioMes">
+                            <option value="">Todos</option>
+                            <option value="1">Janeiro</option>
+                            <option value="2">Fevereiro</option>
+                            <option value="3">Março</option>
+                            <option value="4">Abril</option>
+                            <option value="5">Maio</option>
+                            <option value="6">Junho</option>
+                            <option value="7">Julho</option>
+                            <option value="8">Agosto</option>
+                            <option value="9">Setembro</option>
+                            <option value="10">Outubro</option>
+                            <option value="11">Novembro</option>
+                            <option value="12">Dezembro</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label>Ano</label>
+                        <select class="form-select" id="relatorioAno">
+                            <option value="">Todos</option>
+                            <option value="2023">2023</option>
+                            <option value="2024">2024</option>
+                            <option value="2025">2025</option>
+                            <option value="2026">2026</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label>Tipo (para despesas)</label>
+                        <select class="form-select" id="relatorioTipo">
+                            <option value="">Todos</option>
+                            <option value="MATERIAL">Material</option>
+                            <option value="MÃO DE OBRA">Mão de Obra</option>
+                            <option value="OUTROS">Outros</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label>&nbsp;</label>
+                        <button class="btn btn-primary w-100" onclick="aplicarFiltrosRelatorio()">
+                            <i class="bi bi-check-lg"></i> Aplicar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cards de Relatórios -->
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0"><i class="bi bi-building"></i> Obras</h5>
+                    </div>
+                    <div class="card-body">
+                        <p>Relatório completo de todas as obras cadastradas com:</p>
+                        <ul>
+                            <li>Dados da obra (nome, cliente, contrato)</li>
+                            <li>Status e datas</li>
+                            <li>Valor do contrato e parcelas</li>
+                            <li>Total de receitas e despesas</li>
+                            <li>Lucro e margem</li>
+                        </ul>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn btn-primary w-100" onclick="gerarRelatorioObras()">
+                            <i class="bi bi-download"></i> Gerar Relatório
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0"><i class="bi bi-cash-stack"></i> Receitas</h5>
+                    </div>
+                    <div class="card-body">
+                        <p>Relatório de receitas com filtros:</p>
+                        <ul>
+                            <li>Filtro por obra, mês e ano</li>
+                            <li>Dados da receita (data, descrição, tipo)</li>
+                            <li>Forma de pagamento e conta</li>
+                            <li>Parcelamento (quantidade de parcelas)</li>
+                            <li>Valores total, recebido e status</li>
+                        </ul>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn btn-success w-100" onclick="gerarRelatorioReceitas()">
+                            <i class="bi bi-download"></i> Gerar Relatório
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-header bg-danger text-white">
+                        <h5 class="mb-0"><i class="bi bi-cart"></i> Despesas</h5>
+                    </div>
+                    <div class="card-body">
+                        <p>Relatório de despesas com filtros:</p>
+                        <ul>
+                            <li>Filtro por obra, mês, ano e tipo</li>
+                            <li>Despesas gerais, materiais e mão de obra</li>
+                            <li>Dados completos de cada despesa</li>
+                            <li>Parcelamento e formas de pagamento</li>
+                            <li>Valores total, pago e status</li>
+                        </ul>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn btn-danger w-100" onclick="gerarRelatorioDespesas()">
+                            <i class="bi bi-download"></i> Gerar Relatório
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-header bg-warning text-dark">
+                        <h5 class="mb-0"><i class="bi bi-bar-chart-steps"></i> Curva ABC</h5>
+                    </div>
+                    <div class="card-body">
+                        <p>Relatório da Curva ABC:</p>
+                        <ul>
+                            <li>Análise por obra ou consolidado</li>
+                            <li>Classificação A (80%), B (15%), C (5%)</li>
+                            <li>Valores previstos vs realizados</li>
+                            <li>Desvios e percentuais</li>
+                        </ul>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn btn-warning w-100" onclick="gerarRelatorioABC()">
+                            <i class="bi bi-download"></i> Gerar Relatório
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0"><i class="bi bi-bank"></i> Contas Bancárias</h5>
+                    </div>
+                    <div class="card-body">
+                        <p>Relatório de contas bancárias:</p>
+                        <ul>
+                            <li>Todas as contas cadastradas</li>
+                            <li>Dados bancários (banco, agência, conta)</li>
+                            <li>Saldo inicial e saldo atual</li>
+                            <li>Tipo de conta</li>
+                        </ul>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn btn-info w-100" onclick="gerarRelatorioContas()">
+                            <i class="bi bi-download"></i> Gerar Relatório
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-header bg-secondary text-white">
+                        <h5 class="mb-0"><i class="bi bi-credit-card"></i> Parcelas</h5>
+                    </div>
+                    <div class="card-body">
+                        <p>Relatório de parcelas a receber/pagar:</p>
+                        <ul>
+                            <li>Parcelas de receitas e contratos</li>
+                            <li>Parcelas de despesas</li>
+                            <li>Datas de vencimento</li>
+                            <li>Valores, saldos e dias em atraso</li>
+                        </ul>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn btn-secondary w-100" onclick="gerarRelatorioParcelas()">
+                            <i class="bi bi-download"></i> Gerar Relatório
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-4 mx-auto">
+                <div class="card h-100">
+                    <div class="card-header bg-dark text-white">
+                        <h5 class="mb-0"><i class="bi bi-graph-up"></i> Financeiro Mensal</h5>
+                    </div>
+                    <div class="card-body">
+                        <p>Relatório financeiro detalhado do mês selecionado:</p>
+                        <ul>
+                            <li>Todas as movimentações do período</li>
+                            <li>Receitas, despesas, materiais e mão de obra</li>
+                            <li>Parcelas recebidas e pagas</li>
+                            <li>Ordenado por data</li>
+                        </ul>
+                        <p class="mb-0"><strong>Use os filtros acima para selecionar mês/ano</strong></p>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn btn-dark w-100" onclick="gerarRelatorioFinanceiro()">
+                            <i class="bi bi-download"></i> Gerar Relatório
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Fluxo de Parcelas -->
+    <div class="modal fade" id="modalFluxoParcelas" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header bg-dark text-white">
+                    <h5 class="modal-title"><i class="bi bi-calendar-check"></i> Fluxo de Parcelas</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="conteudoFluxoParcelas">
+                    Carregando...
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/parcelas.js"></script>
+    <script src="js/relatorios.js"></script>
+</body>
+</html>
