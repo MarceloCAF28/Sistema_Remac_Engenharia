@@ -14,7 +14,7 @@ from database import db
 from models import *
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 # Configurações
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
