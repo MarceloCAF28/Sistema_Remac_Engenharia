@@ -3,7 +3,9 @@
 // ============================================
 
 const API_URL = 'http://' + window.location.hostname + ':5000/api';
+const API_URL = "https://sistema-remac-engenharia.onrender.com";
 
+fetch(`${API_URL}/usuarios`)
 const api = {
     // GET request
     async get(endpoint) {
