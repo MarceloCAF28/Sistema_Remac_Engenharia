@@ -1,4 +1,4 @@
-const API_URL = "https://sistema-remac-engenharia.onrender.com";
+const API_URL = "https://sistema-remac-engenharia.onrender.com/api";
 
 const api = {
     // GET request
