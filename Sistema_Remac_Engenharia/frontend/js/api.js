@@ -1,11 +1,5 @@
-// ============================================
-// API CLIENT - CONEXÃO COM O BACKEND
-// ============================================
-
-const API_URL = 'http://' + window.location.hostname + ':5000/api';
 const API_URL = "https://sistema-remac-engenharia.onrender.com";
 
-fetch(`${API_URL}/usuarios`)
 const api = {
     // GET request
     async get(endpoint) {
@@ -41,7 +35,6 @@ const api = {
         }
     },
 
-    // PUT request
     async put(endpoint, data) {
         try {
             const response = await fetch(API_URL + endpoint, {
@@ -60,7 +53,6 @@ const api = {
         }
     },
 
-    // DELETE request
     async delete(endpoint) {
         try {
             const response = await fetch(API_URL + endpoint, {
