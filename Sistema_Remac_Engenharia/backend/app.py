@@ -5,6 +5,9 @@ import os
 import pandas as pd
 from io import BytesIO
 import traceback
+import os
+from flask import Flask
+from flask_cors import CORS
 
 # Importar db e modelos
 from database import db
@@ -2944,3 +2947,5 @@ if __name__ == '__main__':
     print("   - Relatórios Excel")
     print("=" * 60)
     app.run(debug=True, host='0.0.0.0', port=5000)
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host="0.0.0.0", port=port)
